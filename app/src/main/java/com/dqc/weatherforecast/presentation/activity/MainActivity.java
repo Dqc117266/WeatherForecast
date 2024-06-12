@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this, SystemBarStyle.dark(Color.TRANSPARENT));
+        EdgeToEdge.enable(this, SystemBarStyle.dark(Color.TRANSPARENT), SystemBarStyle.dark(Color.TRANSPARENT));
 
         setContentView(R.layout.activity_main);
         initViews();
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
-        weatherViewModel.fetchWeather("北京");
+//        weatherViewModel.fetchWeather("北京");
 
         weatherViewModel.getWeatherLiveData().observe(this, new Observer<WeatherModel>() {
             @Override

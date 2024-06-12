@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="future_weather_color">#26FFFFFF</color>
+
+    <color name="future_weather_text_color">#CCFFFFFF</color>
 </resources>
