@@ -1,9 +1,12 @@
 package com.dqc.weatherforecast.presentation.activity;
 
-import static com.dqc.weatherforecast.presentation.utils.StatusBarUtil.getStatusBarHeight;
+import static com.dqc.weatherforecast.presentation.viewmodel.CityViewModel.PREFS_NAME;
+import static com.dqc.weatherforecast.presentation.viewmodel.CityViewModel.SELECTED_CITY_KEY;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,16 +23,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.dqc.weatherforecast.R;
 import com.dqc.weatherforecast.data.model.WeatherModel;
 import com.dqc.weatherforecast.presentation.adapter.WeatherAdapter;
+import com.dqc.weatherforecast.presentation.utils.StatusBarUtil;
 import com.dqc.weatherforecast.presentation.utils.StringUtil;
 import com.dqc.weatherforecast.presentation.viewmodel.WeatherViewModel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WeatherAdapter.OnItemClickListener {
 
     private WeatherViewModel weatherViewModel;
     private WeatherAdapter weatherAdapter;
@@ -37,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView weatherTipsText;
     private TextView weatherText;
     private TextView temperatureNumberSmallText;
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +54,26 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         initViews();
+        setupRefreshLayout();
     }
 
     private void initViews() {
-        int statusBarHeight = getStatusBarHeight(this);
+        int statusBarHeight = StatusBarUtil.getStatusBarHeight(this);
+        int navigationBarHeight = StatusBarUtil.getNavigationBarHeight(this);
 
         // 获取 MaterialToolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         // 设置 MaterialToolbar 的 marginTop 属性为状态栏的高度
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) toolbar.getLayoutParams();
         params.setMargins(0, statusBarHeight, 0, 0);
         toolbar.setLayoutParams(params);
+
+        ConstraintLayout.LayoutParams swipeRefreshLayoutLayoutParams = (ConstraintLayout.LayoutParams) swipeRefreshLayout.getLayoutParams();
+        swipeRefreshLayoutLayoutParams.setMargins(0, 0, 0, navigationBarHeight);
 
         numberBigTextView = findViewById(R.id.temperature_number_big_text);
         weatherText = findViewById(R.id.weather_text);
@@ -65,11 +81,23 @@ public class MainActivity extends AppCompatActivity {
         temperatureNumberSmallText = findViewById(R.id.temperature_number_small_text);
         weatherTipsText.setSelected(true);
 
-        RecyclerView recyclerView = findViewById(R.id.weather_recycler_view);
+        recyclerView = findViewById(R.id.weather_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
-        weatherViewModel.fetchWeather("101030100");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSelectedCity();
+    }
+
+    private void loadSelectedCity() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String selectedCity = sharedPreferences.getString(SELECTED_CITY_KEY, "101010100");
+
+        weatherViewModel.fetchWeather(selectedCity);
 
         weatherViewModel.getWeatherLiveData().observe(this, new Observer<WeatherModel>() {
             @SuppressLint("SetTextI18n")
@@ -89,15 +117,22 @@ public class MainActivity extends AppCompatActivity {
 
                     temperatureNumberSmallText.setText(lowNumber + " / " + highNumber + "°C");
 
-                    for (int i = 0; i < weatherList.size(); i++) {
-                        WeatherModel.DataModel.ForecastModel futureModel = weatherList.get(i);
-                        System.out.println("futureModel:" + futureModel.getType());
-                    }
-                    System.out.println("weatherList:" + weatherList);
                     weatherAdapter = new WeatherAdapter(weatherList);
                     weatherAdapter.setCurrentDateStr(weatherModel.getTime());
+                    weatherAdapter.setListener(MainActivity.this);
+
                     recyclerView.setAdapter(weatherAdapter);
                 }
+            }
+        });
+    }
+
+    private void setupRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                loadSelectedCity();
             }
         });
     }
@@ -117,4 +152,11 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onItemClick(WeatherModel.DataModel.ForecastModel forecastModel) {
+        // 点击事件处理逻辑
+        Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
+        intent.putExtra("forecast_model", forecastModel);
+        startActivity(intent);    }
 }

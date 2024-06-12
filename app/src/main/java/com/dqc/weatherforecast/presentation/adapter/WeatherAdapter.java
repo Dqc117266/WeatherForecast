@@ -21,6 +21,12 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
     private List<WeatherModel.DataModel.ForecastModel> weatherList;
     private String currentDateStr;
 
+    private OnItemClickListener listener;
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public WeatherAdapter(List<WeatherModel.DataModel.ForecastModel> weatherList) {
         this.weatherList = weatherList;
     }
@@ -51,6 +57,12 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
         holder.temperatureTextView.setText(lowNumber + " / " + highNumber + "°C");
 
         holder.weatherImageView.setImageResource(ImgUtil.getImgResOfWeather(weatherItem.getType()));
+
+        holder.itemView.setOnClickListener(v -> {
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(weatherList.get(position));
+            }
+        });
     }
 
     @Override
@@ -72,6 +84,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
             weatherTextView = itemView.findViewById(R.id.weather_text);
             temperatureTextView = itemView.findViewById(R.id.temperature_text);
             weatherImageView = itemView.findViewById(R.id.weather_image);
+
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(WeatherModel.DataModel.ForecastModel forecastModel);
     }
 }

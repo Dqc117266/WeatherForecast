@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/toolbar"
-        app:title="管理城市"
+        app:title="选择城市"
         app:titleTextColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -21,5 +21,30 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         app:navigationIcon="@drawable/ic_back_arrow"/>
 
+    <EditText
+        android:id="@+id/search_city"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/search_background"
+        android:hint="搜索城市"
+        android:padding="12dp"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/search_city"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:scrollbars="vertical"
+        android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

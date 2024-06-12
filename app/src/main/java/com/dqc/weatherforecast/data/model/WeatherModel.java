@@ -1,5 +1,6 @@
 package com.dqc.weatherforecast.data.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class WeatherModel {
@@ -325,7 +326,7 @@ public class WeatherModel {
             }
         }
 
-        public static class ForecastModel {
+        public static class ForecastModel implements Serializable {
             /**
              * date : 12
              * high : 高温 36℃

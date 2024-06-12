@@ -1,6 +1,7 @@
 package com.dqc.weatherforecast.presentation.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.TypedValue;
 
 public class StatusBarUtil {
@@ -17,6 +18,21 @@ public class StatusBarUtil {
             statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
         }
         return statusBarHeight;
+    }
+
+    /**
+     * 获取底部导航栏的高度
+     * @param context 上下文
+     * @return 底部导航栏高度（以像素为单位）
+     */
+    public static int getNavigationBarHeight(Context context) {
+        int navigationBarHeight = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            navigationBarHeight = resources.getDimensionPixelSize(resourceId);
+        }
+        return navigationBarHeight;
     }
 
     /**
