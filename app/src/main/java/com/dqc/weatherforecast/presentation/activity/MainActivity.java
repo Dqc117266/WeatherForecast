@@ -4,6 +4,7 @@ import static com.dqc.weatherforecast.presentation.utils.StatusBarUtil.getStatus
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.SystemBarStyle;
@@ -12,11 +13,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dqc.weatherforecast.R;
 import com.dqc.weatherforecast.data.model.WeatherModel;
+import com.dqc.weatherforecast.presentation.adapter.WeatherAdapter;
 import com.dqc.weatherforecast.presentation.viewmodel.WeatherViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setLayoutParams(params);
 
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
-
 //        weatherViewModel.fetchWeather("北京");
 
         weatherViewModel.getWeatherLiveData().observe(this, new Observer<WeatherModel>() {
@@ -64,5 +68,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.weather_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<WeatherModel.ResultModel.FutureModel> weatherList = new ArrayList<>();
+
+        WeatherModel.ResultModel.FutureModel futureModel = new WeatherModel.ResultModel.FutureModel();
+        futureModel.setDate("06/11");
+        futureModel.setWeather("阴 轻微污染");
+        futureModel.setDirect("北风");
+        futureModel.setTemperature("27/32");
+
+        weatherList.add(futureModel);
+        weatherList.add(futureModel);
+        weatherList.add(futureModel);
+        weatherList.add(futureModel);
+        weatherList.add(futureModel);
+        // Add more items as needed
+
+        WeatherAdapter adapter = new WeatherAdapter(weatherList);
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
     }
 }
