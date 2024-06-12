@@ -3,7 +3,6 @@ package com.dqc.weatherforecast.data.repository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.dqc.weatherforecast.BuildConfig;
 import com.dqc.weatherforecast.data.model.WeatherModel;
 import com.dqc.weatherforecast.data.service.ApiService;
 

@@ -3,21 +3,30 @@ package com.dqc.weatherforecast.presentation.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dqc.weatherforecast.R;
 import com.dqc.weatherforecast.data.model.WeatherModel;
+import com.dqc.weatherforecast.presentation.utils.DateUtil;
+import com.dqc.weatherforecast.presentation.utils.ImgUtil;
+import com.dqc.weatherforecast.presentation.utils.StringUtil;
 
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder> {
 
-    private List<WeatherModel.ResultModel.FutureModel> weatherList;
+    private List<WeatherModel.DataModel.ForecastModel> weatherList;
+    private String currentDateStr;
 
-    public WeatherAdapter(List<WeatherModel.ResultModel.FutureModel> weatherList) {
+    public WeatherAdapter(List<WeatherModel.DataModel.ForecastModel> weatherList) {
         this.weatherList = weatherList;
+    }
+
+    public void setCurrentDateStr(String currentDateStr) {
+        this.currentDateStr = currentDateStr;
     }
 
     @NonNull
@@ -29,10 +38,19 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
 
     @Override
     public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
-        WeatherModel.ResultModel.FutureModel weatherItem = weatherList.get(position);
-        holder.dayTextView.setText(weatherItem.getDate());
-        holder.weatherTextView.setText(weatherItem.getWeather());
-        holder.temperatureTextView.setText(weatherItem.getTemperature());
+        WeatherModel.DataModel.ForecastModel weatherItem = weatherList.get(position);
+
+        String[] dateStrings = DateUtil.getFriendlyDateStrings(weatherItem.getYmd(), currentDateStr);
+
+        holder.dayTextView.setText(dateStrings[0]);
+        holder.monthTextView.setText(dateStrings[1]);
+        holder.weatherTextView.setText(weatherItem.getType());
+
+        String lowNumber = StringUtil.extractTemperature(weatherItem.getLow());
+        String highNumber = StringUtil.extractTemperature(weatherItem.getHigh());
+        holder.temperatureTextView.setText(lowNumber + " / " + highNumber + "°C");
+
+        holder.weatherImageView.setImageResource(ImgUtil.getImgResOfWeather(weatherItem.getType()));
     }
 
     @Override
@@ -42,14 +60,18 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
 
     public static class WeatherViewHolder extends RecyclerView.ViewHolder {
         public TextView dayTextView;
+        public TextView monthTextView;
         public TextView weatherTextView;
         public TextView temperatureTextView;
+        public ImageView weatherImageView;
 
         public WeatherViewHolder(View itemView) {
             super(itemView);
             dayTextView = itemView.findViewById(R.id.day_text);
+            monthTextView = itemView.findViewById(R.id.month_text);
             weatherTextView = itemView.findViewById(R.id.weather_text);
             temperatureTextView = itemView.findViewById(R.id.temperature_text);
+            weatherImageView = itemView.findViewById(R.id.weather_image);
         }
     }
 }

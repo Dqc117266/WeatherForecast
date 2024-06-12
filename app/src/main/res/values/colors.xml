@@ -6,4 +6,5 @@
     <color name="future_weather_color">#26FFFFFF</color>
 
     <color name="future_weather_text_color">#CCFFFFFF</color>
+    <color name="selected_item_text_color">#59FFFFFF</color>
 </resources>

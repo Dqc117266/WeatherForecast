@@ -16,23 +16,6 @@ public class ApiService {
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Request original = chain.request();
-                    HttpUrl originalHttpUrl = original.url();
-
-                    HttpUrl url = originalHttpUrl.newBuilder()
-                            .addQueryParameter("key", BuildConfig.GRADLE_API_TOKEN)
-                            .build();
-
-                    Request.Builder requestBuilder = original.newBuilder()
-                            .url(url);
-
-                    Request request = requestBuilder.build();
-                    return chain.proceed(request);
-                }
-            })
             .build();
 
     private static final Retrofit retrofit = new Retrofit.Builder()
