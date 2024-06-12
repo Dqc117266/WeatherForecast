@@ -54,26 +54,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // 设置 MaterialToolbar 的 marginTop 属性为状态栏的高度
+        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) toolbar.getLayoutParams();
+        params.setMargins(0, statusBarHeight, 0, 0);
+        toolbar.setLayoutParams(params);
+
         numberBigTextView = findViewById(R.id.temperature_number_big_text);
         weatherText = findViewById(R.id.weather_text);
         weatherTipsText = findViewById(R.id.weather_tips_text);
         temperatureNumberSmallText = findViewById(R.id.temperature_number_small_text);
         weatherTipsText.setSelected(true);
 
-
-        // 设置 MaterialToolbar 的 marginTop 属性为状态栏的高度
-        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) toolbar.getLayoutParams();
-        params.setMargins(0, statusBarHeight, 0, 0);
-        toolbar.setLayoutParams(params);
-
         RecyclerView recyclerView = findViewById(R.id.weather_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
         weatherViewModel.fetchWeather("101030100");
 
         weatherViewModel.getWeatherLiveData().observe(this, new Observer<WeatherModel>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(WeatherModel weatherModel) {
                 if (weatherModel != null) {

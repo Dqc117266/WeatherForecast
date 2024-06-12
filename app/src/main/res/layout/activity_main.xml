@@ -142,7 +142,6 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"/>
 
-
             </RelativeLayout>
 
         </RelativeLayout>
