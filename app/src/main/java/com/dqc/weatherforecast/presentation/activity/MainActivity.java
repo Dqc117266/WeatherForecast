@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements WeatherAdapter.On
     private TextView weatherTipsText;
     private TextView weatherText;
     private TextView temperatureNumberSmallText;
+    private TextView shiduContentText;
+    private TextView pm25ContentText;
+    private TextView pm10ContentText;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -79,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements WeatherAdapter.On
         weatherText = findViewById(R.id.weather_text);
         weatherTipsText = findViewById(R.id.weather_tips_text);
         temperatureNumberSmallText = findViewById(R.id.temperature_number_small_text);
+
+        shiduContentText = findViewById(R.id.shidu_content);
+        pm25ContentText = findViewById(R.id.pm25_content);
+        pm10ContentText = findViewById(R.id.pm10_content);
+
         weatherTipsText.setSelected(true);
 
         recyclerView = findViewById(R.id.weather_recycler_view);
@@ -105,12 +113,16 @@ public class MainActivity extends AppCompatActivity implements WeatherAdapter.On
             public void onChanged(WeatherModel weatherModel) {
                 if (weatherModel != null) {
                     numberBigTextView.setText(weatherModel.getData().getWendu());
-                    weatherTipsText.setText(weatherModel.getData().getGanmao());
+                    weatherTipsText.setText("更新时间：" + weatherModel.getCityInfo().getUpdateTime() + "   提示：" + weatherModel.getData().getGanmao());
                     toolbar.setTitle(weatherModel.getCityInfo().getCity());
+
+                    shiduContentText.setText(weatherModel.getData().getShidu());
+                    pm25ContentText.setText("" + weatherModel.getData().getPm25());
+                    pm10ContentText.setText("" + weatherModel.getData().getPm10());
 
                     List<WeatherModel.DataModel.ForecastModel> weatherList = weatherModel.getData().getForecast();
 
-                    weatherText.setText(weatherList.get(0).getType() + " " + weatherModel.getData().getQuality());
+                    weatherText.setText(weatherList.get(0).getType() + " 空气状况" + weatherModel.getData().getQuality());
 
                     String lowNumber = StringUtil.extractTemperature(weatherList.get(0).getLow());
                     String highNumber = StringUtil.extractTemperature(weatherList.get(0).getHigh());
@@ -158,5 +170,6 @@ public class MainActivity extends AppCompatActivity implements WeatherAdapter.On
         // 点击事件处理逻辑
         Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
         intent.putExtra("forecast_model", forecastModel);
-        startActivity(intent);    }
+        startActivity(intent);
+    }
 }

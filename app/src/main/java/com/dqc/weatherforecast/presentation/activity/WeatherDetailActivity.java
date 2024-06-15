@@ -4,17 +4,16 @@ import static com.dqc.weatherforecast.presentation.utils.StatusBarUtil.getStatus
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.dqc.weatherforecast.R;
 import com.dqc.weatherforecast.data.model.WeatherModel;
+import com.dqc.weatherforecast.presentation.utils.AQIUtils;
+import com.dqc.weatherforecast.presentation.utils.StringUtil;
 
 public class WeatherDetailActivity extends AppCompatActivity {
 
@@ -32,9 +31,7 @@ public class WeatherDetailActivity extends AppCompatActivity {
             System.out.println(" forecastModel " + forecastModel.getYmd());
             initViews(forecastModel);
         }
-
     }
-
 
     private void initViews(WeatherModel.DataModel.ForecastModel forecastModel) {
         int statusBarHeight = getStatusBarHeight(this);
@@ -50,6 +47,20 @@ public class WeatherDetailActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) toolbar.getLayoutParams();
         params.setMargins(0, statusBarHeight, 0, 0);
         toolbar.setLayoutParams(params);
+
+        TextView weatherTitle = findViewById(R.id.weather_title);
+        TextView windContent = findViewById(R.id.wind_content);
+        TextView sunriseContent = findViewById(R.id.sunrise_content);
+        TextView aqiContent = findViewById(R.id.aqi_content);
+        TextView lifeContent = findViewById(R.id.life_content);
+
+        String weatherStr = forecastModel.getType() + " " + StringUtil.extractTemperature(forecastModel.getLow()) + " ~ " + StringUtil.extractTemperature(forecastModel.getHigh()) + "℃  " + forecastModel.getWeek();
+        weatherTitle.setText(weatherStr);
+
+        windContent.setText(forecastModel.getFx() + forecastModel.getFl());
+        sunriseContent.setText(forecastModel.getSunrise() + " / " + forecastModel.getSunset());
+        aqiContent.setText(AQIUtils.getAQIDescription(forecastModel.getAqi()));
+        lifeContent.setText(forecastModel.getNotice());
     }
 
 }

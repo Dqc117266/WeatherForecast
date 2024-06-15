@@ -121,7 +121,127 @@
                     android:freezesText="true"/>
 
                 <RelativeLayout
-                    android:layout_below="@+id/weather_tips_text"
+                    android:id="@+id/weather_tips_humidity_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="21dp"
+                    android:layout_marginRight="21dp"
+                    android:paddingBottom="12dp"
+                    android:background="@drawable/future_weather_shape"
+                    android:layout_below="@+id/weather_tips_text">
+
+                    <TextView
+                        android:id="@+id/tips_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/future_weather_text_color"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="8dp"
+                        android:textSize="16sp"
+                        android:paddingBottom="8dp"
+                        android:text="专业天气指数"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@+id/tips_title"
+                       android:orientation="horizontal">
+
+                       <LinearLayout
+                           android:id="@+id/shidu_layout"
+                           android:layout_below="@+id/tips_title"
+                           android:layout_marginLeft="16dp"
+                           android:layout_weight="1"
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:orientation="vertical">
+
+                           <TextView
+                               android:textSize="12sp"
+                               android:id="@+id/shidu_text"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/future_weather_text_color"
+                               android:text="湿度"/>
+
+                           <TextView
+                               android:id="@+id/shidu_content"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/white"
+                               android:layout_marginTop="4dp"
+                               android:textStyle="bold"
+                               android:textSize="16sp"
+                               android:text="84%"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:id="@+id/pm25_layout"
+                           android:layout_weight="1"
+                           android:layout_below="@+id/tips_title"
+                           android:layout_toRightOf="@+id/shidu_layout"
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:orientation="vertical">
+
+                           <TextView
+                               android:textSize="12sp"
+                               android:id="@+id/pm25_text"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/future_weather_text_color"
+                               android:text="pm25"/>
+
+                           <TextView
+                               android:id="@+id/pm25_content"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/white"
+                               android:layout_marginTop="6dp"
+                               android:textStyle="bold"
+                               android:textSize="16sp"
+                               android:text="46"/>
+
+                       </LinearLayout>
+
+                       <LinearLayout
+                           android:id="@+id/pm10_layout"
+                           android:layout_below="@+id/tips_title"
+                           android:layout_toRightOf="@+id/pm25_layout"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginRight="16dp"
+                           android:orientation="vertical">
+
+                           <TextView
+                               android:textSize="12sp"
+                               android:id="@+id/pm10_text"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/future_weather_text_color"
+                               android:text="pm10"/>
+
+                           <TextView
+                               android:id="@+id/pm10_content"
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textColor="@color/white"
+                               android:layout_marginTop="6dp"
+                               android:textStyle="bold"
+                               android:textSize="16sp"
+                               android:text="62"/>
+
+                       </LinearLayout>
+
+                   </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_below="@+id/weather_tips_humidity_layout"
                     android:layout_width="match_parent"
                     android:background="@drawable/future_weather_shape"
                     android:layout_marginTop="12dp"
